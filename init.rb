@@ -20,6 +20,7 @@ Rails.application.config.to_prepare do
   ApplicationHelper.send(:include, RedmineIdd::ApplicationHelperPatch )
   QueriesHelper.send(:include, RedmineIdd::QueriesHelperPatch )
   Project.send(:include, RedmineIdd::ProjectPatch )
+  Issue.send(:include, RedmineIdd::IssuePatch )
   Version.send(:include, RedmineIdd::VersionPatch )
   Redmine::Helpers::Calendar.send(:include, RedmineIdd::CalendarPatch )
   Redmine::Helpers::Gantt.send(:include, RedmineIdd::GanttPatch )
