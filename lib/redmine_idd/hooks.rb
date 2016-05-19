@@ -9,5 +9,6 @@ module RedmineFinancial
     #   :f      => the form object to create additional fields
 
     render_on :view_issues_form_details_bottom, :partial=> 'hooks/redmine_idd/set_due_date'
+    render_on :view_projects_form, :partial=> 'hooks/redmine_idd/project_form'
   end
 end
