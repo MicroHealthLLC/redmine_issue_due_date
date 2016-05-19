@@ -7,7 +7,7 @@
   });
   function set_due_date(){
     <% prs = Setting.plugin_redmine_issue_due_date
-    unless prs['setting_done'].presence
+    if prs['setting_done'].presence
     %>
     priorities = JSON.parse(<%= prs.inject({}){|acc, (k,v)| acc[k.to_i] = v.to_i; acc}.to_json.inspect.html_safe%>);
 
