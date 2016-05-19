@@ -6,10 +6,14 @@
     set_due_date();
   });
   function set_due_date(){
-    priorities = JSON.parse(<%= Setting.plugin_redmine_issue_due_date.inject({}){|acc, (k,v)| acc[k.to_i] = v.to_i; acc}.to_json.inspect.html_safe%>);
+    <% prs = Setting.plugin_redmine_issue_due_date
+    unless prs['setting_done'].presence
+    %>
+    priorities = JSON.parse(<%= prs.inject({}){|acc, (k,v)| acc[k.to_i] = v.to_i; acc}.to_json.inspect.html_safe%>);
 
     pr_id= $('#issue_priority_id').val();
     $('#issue_due_date').val(addDays(priorities[pr_id]))
+    <% end %>
   }
   function addDays(days) {
     var result = new Date();
