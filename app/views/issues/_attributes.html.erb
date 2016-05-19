@@ -50,14 +50,14 @@
 
 <% if @issue.safe_attribute? 'start_date' %>
 <p id="start_date_area">
-  <%= f.text_field(:start_date, :value => (@issue.start_date ? localise_date(@issue.start_date).strftime('%Y-%m-%d') : ''), :size => 10, :required => @issue.required_attribute?('start_date')) %>
+  <%= f.text_field(:start_date, :value => (@issue.start_date ? localise_date(@issue.start_date).strftime('%Y-%m-%d %H:%M') : ''), :size => 10, :required => @issue.required_attribute?('start_date')) %>
   <%= calendar_for_issue('issue_start_date') if @issue.leaf? %>
 </p>
 <% end %>
 
 <% if @issue.safe_attribute? 'due_date' %>
 <p id="due_date_area">
-  <%= f.text_field(:due_date, :value => (@issue.due_date ? localise_date(@issue.due_date).strftime('%Y-%m-%d') : ''), :size => 10, :required => @issue.required_attribute?('due_date')) %>
+  <%= f.text_field(:due_date, :value => (@issue.due_date ? localise_date(@issue.due_date).strftime('%Y-%m-%d %H:%M') : ''), :size => 10, :required => @issue.required_attribute?('due_date')) %>
   <%= calendar_for_issue('issue_due_date') if @issue.leaf? %>
 </p>
 <% end %>

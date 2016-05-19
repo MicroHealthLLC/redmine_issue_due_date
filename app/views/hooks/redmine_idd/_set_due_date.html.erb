@@ -1,18 +1,28 @@
 <script>
-  $(document).ready(function(){
-    $('#issue_priority_id').on('change', function(){
-      set_due_date();
-    });
-    set_due_date();
-  });
-  function set_due_date(){
+
     <% prs = Setting.plugin_redmine_issue_due_date
-    if prs['setting_done'].presence
+    unless prs['setting_done'] == false
     %>
+    $(document).ready(function(){
+      $('#issue_priority_id').on('change', function(){
+        set_due_date();
+      });
+      <% if issue.new_record? %>
+      set_due_date();
+      <% end %>
+    });
+    function set_due_date(){
     priorities = JSON.parse(<%= prs.inject({}){|acc, (k,v)| acc[k.to_i] = v.to_i; acc}.to_json.inspect.html_safe%>);
 
     pr_id= $('#issue_priority_id').val();
-    $('#issue_due_date').val(addDays(priorities[pr_id]))
+      if(priorities[pr_id])
+      {
+        $('#issue_due_date').val(addDays(priorities[pr_id]));
+      }
+      else{
+        $('#issue_due_date').val('');
+      }
+
     <% end %>
   }
   function addDays(days) {

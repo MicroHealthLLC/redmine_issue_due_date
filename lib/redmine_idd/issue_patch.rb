@@ -84,12 +84,12 @@ module RedmineIdd
             return localised_datetime.change(localised_date).utc
           end
 
-          if (start_time = attrs.delete('start_time')) && safe_attribute?('start_time') && self.start_date.is_a?(Time)
-            self.start_date = load_localised_time(self.start_date, start_time, user.time_zone)
+          if self.start_date.is_a?(Time) && (@start_time = {'hour'=> self.start_date.strftime('%H'), 'minute'=> self.start_date.strftime('%M')}) && safe_attribute?('start_time')
+            self.start_date = load_localised_time(self.start_date, @start_time, user.time_zone)
           end
 
-          if (due_time = attrs.delete('due_time')) && safe_attribute?('due_time') && self.due_date.is_a?(Time)
-            self.due_date = load_localised_time(self.due_date, due_time, user.time_zone)
+          if self.due_date.is_a?(Time) &&  (@due_time = {'hour'=> self.due_date.strftime('%H'), 'minute'=> self.due_date.strftime('%M')}) && safe_attribute?('due_time')
+            self.due_date = load_localised_time(self.due_date, @due_time, user.time_zone)
           end
         end
 
@@ -104,15 +104,15 @@ module RedmineIdd
             Time.zone = time_zone
           end
 
-          if st=start_time and sd=start_date
+          if st=@start_time and sd=start_date
             if st['hour'].to_i >= 0 or st['minute'].to_i >= 0
-              self.start_date = Time.zone.parse( "#{sd.year}.#{sd.month}.#{sd.day} #{st['hour']}:#{st['minute']}:00" ).utc # Parse in as local but save as UTC
+              self.start_date = Time.parse( "#{sd.year}.#{sd.month}.#{sd.day} #{st['hour']}:#{st['minute']}:00" ).utc # Parse in as local but save as UTC
             end
           end
 
-          if dt=due_time and dd=due_date
+          if dt=@due_time and dd=due_date
             if dt['hour'].to_i >= 0 or dt['minute'].to_i >= 0
-              self.due_date = Time.zone.parse( "#{dd.year}.#{dd.month}.#{dd.day} #{dt['hour']}:#{dt['minute']}:00").utc # Parse in as local but save as UTC
+              self.due_date = Time.parse( "#{dd.year}.#{dd.month}.#{dd.day} #{dt['hour']}:#{dt['minute']}:00").utc # Parse in as local but save as UTC
             end
           end
 
