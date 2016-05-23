@@ -38,12 +38,8 @@
       if(priorities['days_'+pr_id])
       {
         r= r.addDays(priorities['days_'+pr_id])
-
-        $('#issue_due_date').val(show_date(r)+ ' '+ r.getUTCHours() +':'+minutes);
       }
-      else{
-        $('#issue_due_date').val('');
-      }
+      $('#issue_due_date').val(show_date(r)+ ' '+ r.getUTCHours() +':'+minutes);
 
     <% end %>
   }
