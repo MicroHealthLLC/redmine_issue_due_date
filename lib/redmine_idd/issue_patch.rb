@@ -103,16 +103,19 @@ module RedmineIdd
           if time_zone
             Time.zone = time_zone
           end
-
+          zone = User.current.time_zone
           if st=@start_time and sd=start_date
             if st['hour'].to_i >= 0 or st['minute'].to_i >= 0
-              self.start_date = Time.parse( "#{sd.year}.#{sd.month}.#{sd.day} #{st['hour']}:#{st['minute']}:00" ).utc # Parse in as local but save as UTC
+              time = Time.parse( "#{sd.year}.#{sd.month}.#{sd.day} #{st['hour']}:#{st['minute']}:00" ) # Parse in as local but save as UTC
+
+              self.start_date = zone ? time.in_time_zone(zone) : (time.utc? ? time.localtime : time)
             end
           end
 
           if dt=@due_time and dd=due_date
             if dt['hour'].to_i >= 0 or dt['minute'].to_i >= 0
-              self.due_date = Time.parse( "#{dd.year}.#{dd.month}.#{dd.day} #{dt['hour']}:#{dt['minute']}:00").utc # Parse in as local but save as UTC
+              time =  Time.parse( "#{dd.year}.#{dd.month}.#{dd.day} #{dt['hour']}:#{dt['minute']}:00") # Parse in as local but save as UTC
+              self.due_date = zone ? time.in_time_zone(zone) : (time.utc? ? time.localtime : time)
             end
           end
 

@@ -25,8 +25,13 @@ module RedmineIdd
             @issue.project ||= @issue.allowed_target_projects.first
           end
           @issue.author ||= User.current
-          @issue.start_date ||= DateTime.now if Setting.default_issue_start_date_to_creation_date?
 
+          zone = User.current.time_zone
+          sd = DateTime.now
+          time = Time.parse( "#{sd.year}.#{sd.month}.#{sd.day} #{sd.hour}:#{sd.minute}:00" ).utc
+          if Setting.default_issue_start_date_to_creation_date?
+            @issue.start_date ||= zone ? time.in_time_zone(zone) : (time.utc? ? time.localtime : time)
+          end
           attrs = (params[:issue] || {}).deep_dup
           if action_name == 'new' && params[:was_default_status] == attrs[:status_id]
             attrs.delete(:status_id)

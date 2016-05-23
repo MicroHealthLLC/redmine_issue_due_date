@@ -18,7 +18,7 @@ end
 Rails.application.config.to_prepare do
   require_dependency 'redmine_idd/hooks'
   ApplicationHelper.send(:include, RedmineIdd::ApplicationHelperPatch )
-  # IssuesController.send(:include, RedmineIdd::IssuesControllerPatch )
+  IssuesController.send(:include, RedmineIdd::IssuesControllerPatch )
   QueriesHelper.send(:include, RedmineIdd::QueriesHelperPatch )
   Project.send(:include, RedmineIdd::ProjectPatch )
   Issue.send(:include, RedmineIdd::IssuePatch )
