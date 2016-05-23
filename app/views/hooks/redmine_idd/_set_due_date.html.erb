@@ -10,14 +10,36 @@
       <% if issue.new_record? %>
       set_due_date();
       <% end %>
+      $('#issue_start_date').on('change', function() {
+        set_due_date();
+      })
     });
     function set_due_date(){
-    priorities = JSON.parse(<%= prs.inject({}){|acc, (k,v)| acc[k.to_i] = v.to_i; acc}.to_json.inspect.html_safe%>);
+    priorities = JSON.parse(<%= prs.inject({}){|acc, (k,v)| acc[k] = v.to_i; acc}.to_json.inspect.html_safe%>);
 
     pr_id= $('#issue_priority_id').val();
-      if(priorities[pr_id])
+
+      r = new Date();
+      start_date = $('#issue_start_date').val().split(' ')[0];
+      if(start_date.length>8)
+        r = new Date(start_date);
+      start_time = $('#issue_start_date').val().split(' ')[1];
+      minutes = '00';
+
+      if(start_time.split(':').length >1 )
       {
-        $('#issue_due_date').val(addDays(priorities[pr_id])+ ' 00:00');
+        r.addHours(parseInt(start_time.split(':')[0]));
+        minutes= start_time.split(':')[1]
+      }
+      if(priorities['hours_'+pr_id])
+      {
+        r.addHours(priorities['hours_'+pr_id])
+      }
+      if(priorities['days_'+pr_id])
+      {
+        r= r.addDays(priorities['days_'+pr_id])
+
+        $('#issue_due_date').val(show_date(r)+ ' '+ r.getUTCHours() +':'+minutes);
       }
       else{
         $('#issue_due_date').val('');
@@ -25,9 +47,17 @@
 
     <% end %>
   }
-  function addDays(days) {
-    var result = new Date();
-    result.setDate(result.getDate() + days);
+  function show_date(result) {
     return result.getFullYear() + '-'+ ("0" + (result.getMonth() + 1)).slice(-2) +'-'+ ("0" + (result.getDate())).slice(-2);
   }
+    Date.prototype.addHours= function(h){
+      this.setHours(this.getHours()+h);
+      return this;
+    }
+    Date.prototype.addDays = function(days)
+    {
+      var dat = new Date(this.valueOf());
+      dat.setDate(dat.getDate() + days);
+      return dat;
+    }
 </script>

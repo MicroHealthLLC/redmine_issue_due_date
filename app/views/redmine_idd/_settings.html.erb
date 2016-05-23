@@ -9,7 +9,10 @@
           <%= pr.name %>
         </td>
         <td>
-          <%= number_field_tag "settings[#{pr.id}]", @settings["#{pr.id}"] %>
+          <%= number_field_tag "settings[days_#{pr.id}]", @settings["days_#{pr.id}"] %> day(s)
+        </td>
+        <td>
+          <%= number_field_tag "settings[hours_#{pr.id}]", @settings["hours_#{pr.id}"] %>hour(s)
         </td>
       </tr>
   <% end %>
